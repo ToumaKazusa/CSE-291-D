@@ -1,6 +1,10 @@
 package rmi;
 
+import java.lang.reflect.Method;
 import java.net.*;
+
+import javax.management.ListenerNotFoundException;
+
 import rmi.ServerListener;
 
 /** RMI skeleton
@@ -49,9 +53,37 @@ public class Skeleton<T>
 	private Class<T> c = null;
     private T interfaceImpl = null;
     private InetSocketAddress address = null;
+    private ServerListener<T> listener = null;
     
-    public Skeleton(Class<T> c, T server)
+    public Skeleton(Class<T> c, T server) throws Exception
     {
+    	if (c == null) {
+    		throw new NullPointerException("Class is Null");
+    	}
+    	
+    	if (server == null) {
+    		throw new NullPointerException("Implementation is Null");
+    	}
+    	
+    	if (!c.isInterface()) {
+    		throw new Exception("Class is not an interface");
+    	}
+    	
+    	Method[] methods = c.getMethods();
+        for (Method method : methods) {
+            Class[] exceptions = method.getExceptionTypes();
+            boolean flag = false;
+            for (Class exception : exceptions) {
+                if (exception.getName().contains("RMIException")) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                throw new Error("It's a non-remote interface");
+            }
+        }
+        
     	this.c = c;
     	this.interfaceImpl = server;
     }
@@ -74,8 +106,39 @@ public class Skeleton<T>
         @throws NullPointerException If either of <code>c</code> or
                                      <code>server</code> is <code>null</code>.
      */
-    public Skeleton(Class<T> c, T server, InetSocketAddress address)
+    public Skeleton(Class<T> c, T server, InetSocketAddress address) throws Exception
     {
+    	if (c == null) {
+    		throw new NullPointerException("Class is Null");
+    	}
+    	
+    	if (server == null) {
+    		throw new NullPointerException("Implementation is Null");
+    	}
+    	
+    	if (address == null) {
+    		throw new NullPointerException("Server Address is Null");
+    	}
+    	
+    	if (!c.isInterface()) {
+    		throw new Exception("Class is not an interface");
+    	}
+    	
+    	Method[] methods = c.getMethods();
+        for (Method method : methods) {
+            Class[] exceptions = method.getExceptionTypes();
+            boolean flag = false;
+            for (Class exception : exceptions) {
+                if (exception.getName().contains("RMIException")) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                throw new Error("It's a non-remote interface");
+            }
+        }
+    	
         this.c = c;
         this.interfaceImpl = server;
         this.address = address;
@@ -104,6 +167,7 @@ public class Skeleton<T>
      */
     protected void stopped(Throwable cause)
     {
+    	System.out.print("Stopped from " + cause);
     }
 
     /** Called when an exception occurs at the top level in the listening
@@ -123,6 +187,13 @@ public class Skeleton<T>
      */
     protected boolean listen_error(Exception exception)
     {
+    	System.out.println("Listen_error " + exception);
+    	try {
+    		start();
+    		return true;
+    	} catch (Exception ex) {
+    		System.out.println(ex);
+    	}
         return false;
     }
 
@@ -135,6 +206,7 @@ public class Skeleton<T>
      */
     protected void service_error(RMIException exception)
     {
+    	System.out.println(exception);
     }
 
     /** Starts the skeleton server.
@@ -152,9 +224,21 @@ public class Skeleton<T>
      */
     public synchronized void start() throws RMIException
     {
-        ServerListener<T> listener = new ServerListener<T>(address, c, interfaceImpl) {
+    	if (address == null) {
+    		throw new NullPointerException("Address is Null");
+    	}
+    	
+    	if (c == null) {
+    		throw new NullPointerException("Class is Null");
+    	}
+    	
+    	if (interfaceImpl == null) {
+    		throw new NullPointerException("Implementation is Null");
+    	}
+    	
+        listener = new ServerListener<T>(address, c, interfaceImpl) {
 		};
-		listener.run();
+		new Thread(listener).run();
     }
 
     /** Stops the skeleton server, if it is already running.
@@ -168,6 +252,15 @@ public class Skeleton<T>
      */
     public synchronized void stop()
     {
-        throw new UnsupportedOperationException("not implemented");
+    	if (listener != null && isRunning()) {
+    		listener.stop();
+    	}
+    }
+    
+    public boolean isRunning() {
+    	if (listener == null) {
+    		return false;
+    	}
+    	return listener.isRunning();
     }
 }

@@ -4,6 +4,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 public abstract class ServerListener<T> implements Runnable {
 	
@@ -13,6 +14,7 @@ public abstract class ServerListener<T> implements Runnable {
 	private Socket socket;
 	private Class c;
 	private T object;
+	private Semaphore permit = new Semaphore(3);
 	
 	public ServerListener (InetSocketAddress address, Class c, T obj) {
 		this.host = address;
@@ -54,11 +56,31 @@ public abstract class ServerListener<T> implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		if (!listening) {
-			System.out.println("Listening");
+		try {
+			permit.acquire();
 			listening = true;
+			System.out.println("Listening");
 			listen();
+		} catch (Exception ex) {
+			System.out.println(ex);
 		}
+	}
+	
+	public void stop() {
+		try {
+			permit.release();
+			listening = false;
+			System.out.println("Closing");
+			if (serversocket != null) {
+				serversocket.close();
+			}
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+	}
+	
+	public boolean isRunning() {
+		return listening;
 	}
 	
 }

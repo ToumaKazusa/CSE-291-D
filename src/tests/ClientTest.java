@@ -18,9 +18,7 @@ public class ClientTest {
 	@Test
 	public void test() throws NoSuchMethodException, SecurityException, Throwable {
 		InetSocketAddress addr = new InetSocketAddress("localhost", 32769);
-		Skeleton<ClientClass> skeleton = new Skeleton<>(null, null, addr);
-		ClientClass client = Stub.create(ClientClass.class, skeleton);
-		
+		ClientClass client = Stub.create(ClientClass.class, addr);
 		System.out.println(client.run());
 		
 //		ClassInvocationHandler handler = new ClassInvocationHandler();

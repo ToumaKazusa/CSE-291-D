@@ -14,7 +14,7 @@ public class ServerTest {
 	public void test() throws NoSuchMethodException, SecurityException, Throwable {
 		InetSocketAddress addr = new InetSocketAddress("localhost", 32769);
 		
-		Skeleton<ServerClass> skeleton = new Skeleton<ServerClass>(ServerClass.class, new ServerClass(), addr);
+		Skeleton<ClientClass> skeleton = new Skeleton<ClientClass>(ClientClass.class, new ServerClass(), addr);
 		skeleton.start();
 		
 	}
