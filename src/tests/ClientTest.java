@@ -8,7 +8,9 @@ import java.net.InetSocketAddress;
 
 import org.junit.Test;
 
-import rmi.ClassInvocationHandler;
+import tests.ClientClass;
+import rmi.Skeleton;
+import rmi.Stub;
 
 public class ClientTest {
 
@@ -16,14 +18,18 @@ public class ClientTest {
 	@Test
 	public void test() throws NoSuchMethodException, SecurityException, Throwable {
 		InetSocketAddress addr = new InetSocketAddress("localhost", 32769);
+		Skeleton<ClientClass> skeleton = new Skeleton<>(null, null, addr);
+		ClientClass client = Stub.create(ClientClass.class, skeleton);
 		
-		ClassInvocationHandler handler = new ClassInvocationHandler();
-		handler.host = addr;
-		Class<TestClass> c = TestClass.class;
-		Class[] args = {};
+		System.out.println(client.run());
 		
-		TestClass obj = (TestClass) Proxy.newProxyInstance(c.getClassLoader(), new Class[]{c}, handler);
-		System.out.println(obj.run());
+//		ClassInvocationHandler handler = new ClassInvocationHandler();
+//		handler.host = addr;
+//		Class<TestClass> c = TestClass.class;
+//		Class[] args = {};
+//		
+//		TestClass obj = (TestClass) Proxy.newProxyInstance(c.getClassLoader(), new Class[]{c}, handler);
+//		System.out.println(obj.run());
 	}
 
 }

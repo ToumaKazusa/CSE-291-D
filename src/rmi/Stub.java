@@ -1,6 +1,6 @@
 package rmi;
 import tests.ServerClass;
-import tests.TestClass;
+import tests.ClientClass;
 
 import java.lang.reflect.*;
 import java.lang.reflect.Proxy;

@@ -1,6 +1,6 @@
 package tests;
 
-public class ServerClass implements TestClass {
+public class ServerClass implements ClientClass {
 
 	@Override
 	public String run() {
