@@ -230,7 +230,8 @@ public class Skeleton<T>
     	
         listener = new ServerListener<T>(address, c, interfaceImpl) {
 		};
-		new Thread(listener).run();
+		
+		new Thread(listener).start();
     }
 
     /** Stops the skeleton server, if it is already running.
