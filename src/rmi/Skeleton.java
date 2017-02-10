@@ -1,6 +1,7 @@
 package rmi;
 
 import java.net.*;
+import rmi.ServerListener;
 
 /** RMI skeleton
 
@@ -51,7 +52,8 @@ public class Skeleton<T>
     
     public Skeleton(Class<T> c, T server)
     {
-    	
+    	this.c = c;
+    	this.interfaceImpl = server;
     }
 
     /** Creates a <code>Skeleton</code> with the given initial server address.
@@ -74,7 +76,9 @@ public class Skeleton<T>
      */
     public Skeleton(Class<T> c, T server, InetSocketAddress address)
     {
-        throw new UnsupportedOperationException("not implemented");
+        this.c = c;
+        this.interfaceImpl = server;
+        this.address = address;
     }
 
     public InetSocketAddress getAddress(){
@@ -148,7 +152,9 @@ public class Skeleton<T>
      */
     public synchronized void start() throws RMIException
     {
-        throw new UnsupportedOperationException("not implemented");
+        ServerListener<T> listener = new ServerListener<T>(address, c, interfaceImpl) {
+		};
+		listener.run();
     }
 
     /** Stops the skeleton server, if it is already running.
