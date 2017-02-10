@@ -232,6 +232,13 @@ public class Skeleton<T>
 		};
 		
 		new Thread(listener).start();
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /** Stops the skeleton server, if it is already running.
