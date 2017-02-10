@@ -45,9 +45,13 @@ public class Skeleton<T>
         @throws NullPointerException If either of <code>c</code> or
                                      <code>server</code> is <code>null</code>.
      */
+	private Class<T> c = null;
+    private T interfaceImpl = null;
+    private InetSocketAddress address = null;
+    
     public Skeleton(Class<T> c, T server)
     {
-        throw new UnsupportedOperationException("not implemented");
+    	
     }
 
     /** Creates a <code>Skeleton</code> with the given initial server address.
@@ -73,6 +77,9 @@ public class Skeleton<T>
         throw new UnsupportedOperationException("not implemented");
     }
 
+    public InetSocketAddress getAddress(){
+    	return address;
+    }
     /** Called when the listening thread exits.
 
         <p>

@@ -13,6 +13,11 @@ public class ClassInvocationHandler implements InvocationHandler, Serializable {
 	public InetSocketAddress host;
 	public Object object;
 	
+	public ClassInvocationHandler(InetSocketAddress inetSocketAddress, Object object) {
+        this.host = inetSocketAddress;
+        this.object = object;
+    }
+	
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		

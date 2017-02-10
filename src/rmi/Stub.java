@@ -1,5 +1,9 @@
 package rmi;
+import tests.ServerClass;
+import tests.TestClass;
 
+import java.lang.reflect.*;
+import java.lang.reflect.Proxy;
 import java.net.*;
 
 /** RMI stub factory.
@@ -48,7 +52,42 @@ public abstract class Stub
     public static <T> T create(Class<T> c, Skeleton<T> skeleton)
         throws UnknownHostException
     {
-        throw new UnsupportedOperationException("not implemented");
+    	if(c == null){
+    		throw new NullPointerException("class is null");
+    	}
+    	
+    	if(skeleton == null){
+    		throw new NullPointerException("skeleton is null");
+    	}
+    	
+    	// check if the interface is a remote interface
+        Method[] methods = c.getMethods();
+        for (Method method : methods) {
+            Class[] exceptions = method.getExceptionTypes();
+            boolean flag = false;
+            for (Class exception : exceptions) {
+                if (exception.getName().contains("RMIException")) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                throw new Error("It's a non-remote interface");
+            }
+        }
+
+        // connect address
+        InetSocketAddress skeletonAddress = skeleton.getAddress();
+
+        if (skeletonAddress == null) {
+            throw new IllegalStateException("Unknown host exception");
+        }
+
+        ClassInvocationHandler handler = new ClassInvocationHandler(skeleton.getAddress(), c);
+        T instance = (T) Proxy.newProxyInstance(c.getClassLoader(), new Class[]{c}, handler);
+
+        return instance;
+    	
     }
 
     /** Creates a stub, given a skeleton with an assigned address and a hostname
@@ -84,7 +123,45 @@ public abstract class Stub
     public static <T> T create(Class<T> c, Skeleton<T> skeleton,
                                String hostname)
     {
-        throw new UnsupportedOperationException("not implemented");
+    	if(c == null){
+    		throw new NullPointerException("class is null");
+    	}
+    	
+    	if(skeleton == null){
+    		throw new NullPointerException("skeleton is null");
+    	}
+    	
+    	if(hostname == null){
+    		throw new NullPointerException("hostname is null");
+    	}
+    	
+    	// check if the interface is a remote interface
+        Method[] methods = c.getMethods();
+        for (Method method : methods) {
+            Class[] exceptions = method.getExceptionTypes();
+            boolean flag = false;
+            for (Class exception : exceptions) {
+                if (exception.getName().contains("RMIException")) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                throw new Error("It's a non-remote interface");
+            }
+        }
+
+        // connect address
+        InetSocketAddress skeletonAddress = skeleton.getAddress();
+
+        if (skeletonAddress == null) {
+            throw new IllegalStateException("Unknown host exception");
+        }
+
+        ClassInvocationHandler handler = new ClassInvocationHandler(skeleton.getAddress(), c);
+        T instance = (T) Proxy.newProxyInstance(c.getClassLoader(), new Class[]{c}, handler);
+
+        return instance;
     }
 
     /** Creates a stub, given the address of a remote server.
@@ -106,6 +183,34 @@ public abstract class Stub
      */
     public static <T> T create(Class<T> c, InetSocketAddress address)
     {
-        throw new UnsupportedOperationException("not implemented");
+    	if(c == null){
+    		throw new NullPointerException("class is null");
+    	}
+    	
+    	if(address == null){
+    		throw new NullPointerException("address is null");
+    	}
+    	
+    	// check if the interface is a remote interface
+        Method[] methods = c.getMethods();
+        for (Method method : methods) {
+            Class[] exceptions = method.getExceptionTypes();
+            boolean flag = false;
+            for (Class exception : exceptions) {
+                if (exception.getName().contains("RMIException")) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                throw new Error("It's a non-remote interface");
+            }
+        }
+
+
+        ClassInvocationHandler handler = new ClassInvocationHandler(address, c);
+        T instance = (T) Proxy.newProxyInstance(c.getClassLoader(), new Class[]{c}, handler);
+
+        return instance;
     }
 }
