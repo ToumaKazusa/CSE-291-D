@@ -55,7 +55,7 @@ public class Skeleton<T>
     private InetSocketAddress address = null;
     private ServerListener<T> listener = null;
     
-    public Skeleton(Class<T> c, T server) throws Exception
+    public Skeleton(Class<T> c, T server)
     {
     	if (c == null) {
     		throw new NullPointerException("Class is Null");
@@ -66,7 +66,7 @@ public class Skeleton<T>
     	}
     	
     	if (!c.isInterface()) {
-    		throw new Exception("Class is not an interface");
+    		throw new NullPointerException("Class is not an interface");
     	}
     	
     	Method[] methods = c.getMethods();
@@ -106,7 +106,7 @@ public class Skeleton<T>
         @throws NullPointerException If either of <code>c</code> or
                                      <code>server</code> is <code>null</code>.
      */
-    public Skeleton(Class<T> c, T server, InetSocketAddress address) throws Exception
+    public Skeleton(Class<T> c, T server, InetSocketAddress address)
     {
     	if (c == null) {
     		throw new NullPointerException("Class is Null");
@@ -121,7 +121,7 @@ public class Skeleton<T>
     	}
     	
     	if (!c.isInterface()) {
-    		throw new Exception("Class is not an interface");
+    		throw new NullPointerException("Class is not an interface");
     	}
     	
     	Method[] methods = c.getMethods();
