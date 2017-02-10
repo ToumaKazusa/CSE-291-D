@@ -254,6 +254,7 @@ public class Skeleton<T>
     {
     	if (listener != null && isRunning()) {
     		listener.stop();
+    		stopped(null);
     	}
     }
     
