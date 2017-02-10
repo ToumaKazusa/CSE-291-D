@@ -30,6 +30,9 @@ public abstract class ServerListener<T> implements Runnable {
 			}
 			while (listening) {
 				System.out.println("Listening...");
+				if (serversocket.isClosed()) {
+					serversocket = new ServerSocket(host.getPort());
+				}
 				socket = serversocket.accept();	
 				System.out.println("Accept...");
 				ObjectInputStream istream = new ObjectInputStream(socket.getInputStream());
