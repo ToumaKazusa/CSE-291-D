@@ -71,7 +71,7 @@ public abstract class ServerListener<T> implements Runnable {
 			permit.release();
 			listening = false;
 			System.out.println("Closing");
-			if (serversocket != null) {
+			if (serversocket != null && !serversocket.isClosed()) {
 				serversocket.close();
 			}
 		} catch (IOException ex) {
