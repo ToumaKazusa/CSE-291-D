@@ -65,10 +65,6 @@ public class Skeleton<T>
     		throw new NullPointerException("Implementation is Null");
     	}
     	
-    	if (!c.isInterface()) {
-    		throw new NullPointerException("Class is not an interface");
-    	}
-    	
     	Method[] methods = c.getMethods();
         for (Method method : methods) {
             Class[] exceptions = method.getExceptionTypes();
@@ -118,10 +114,6 @@ public class Skeleton<T>
     	
     	if (address == null) {
     		throw new NullPointerException("Server Address is Null");
-    	}
-    	
-    	if (!c.isInterface()) {
-    		throw new NullPointerException("Class is not an interface");
     	}
     	
     	Method[] methods = c.getMethods();
