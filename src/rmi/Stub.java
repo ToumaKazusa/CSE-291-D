@@ -158,7 +158,7 @@ public abstract class Stub
             throw new IllegalStateException("Unknown host exception");
         }
 
-        ClassInvocationHandler handler = new ClassInvocationHandler(skeleton.getAddress(), c);
+        ClassInvocationHandler handler = new ClassInvocationHandler(new InetSocketAddress(hostname, skeletonAddress.getPort()), c);
         T instance = (T) Proxy.newProxyInstance(c.getClassLoader(), new Class[]{c}, handler);
 
         return instance;
