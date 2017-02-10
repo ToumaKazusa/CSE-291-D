@@ -61,7 +61,7 @@ public abstract class ServerListener<T> implements Runnable {
 			listening = true;
 			System.out.println("Listening");
 			listen();
-		} catch (Exception ex) {
+		} catch (InterruptedException ex) {
 			System.out.println(ex);
 		}
 	}
@@ -74,7 +74,7 @@ public abstract class ServerListener<T> implements Runnable {
 			if (serversocket != null) {
 				serversocket.close();
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			System.out.println(ex);
 		}
 	}
