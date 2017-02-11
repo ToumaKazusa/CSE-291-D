@@ -119,7 +119,7 @@ public class ClassInvocationHandler implements InvocationHandler, Serializable {
 					Object result = istream.readObject();
 					if (result instanceof Exception) {
 						System.out.println("Get Returen Execption " + result);
-						throw result;
+						throw (Exception)result;
 					}
 					else {
 						return result;
