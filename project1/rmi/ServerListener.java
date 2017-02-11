@@ -31,7 +31,6 @@ public abstract class ServerListener<T> implements Runnable {
 			while (listening) {
 				System.out.println("Listening...");
 				try {
-					System.out.println("Waiting...");
 					socket = serversocket.accept();
 				} catch (Exception ex) {
 					System.out.println(ex);
@@ -52,6 +51,8 @@ public abstract class ServerListener<T> implements Runnable {
 				String methodname = (String) istream.readObject();
 				Object[] args = (Object[]) istream.readObject();
 				Class[] para = (Class[]) istream.readObject();
+				
+				System.out.println("Method name is: " + methodname);
 				
 				Method method = c.getMethod(methodname, para);
 				

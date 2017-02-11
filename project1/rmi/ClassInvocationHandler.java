@@ -110,13 +110,16 @@ public class ClassInvocationHandler implements InvocationHandler, Serializable {
 						ostream.writeObject(args);
 						ostream.writeObject(method.getParameterTypes());
 						ostream.flush();
+						System.out.println("Method " + method.getName() + " invoke successfully");
 					}
 				}catch(Exception e){
+					System.out.println("Method " + method.getName() + " invoke exception " + e);
 					throw new RMIException("skeleton error");
 				}
 				ObjectInputStream istream = new ObjectInputStream(socket.getInputStream());
 				if(istream!=null){
 					Object result = istream.readObject();
+					System.out.println("Method result: " + result);
 					if (result instanceof Exception) {
 						System.out.println("Get Returen Execption " + result);
 						if (result instanceof FileNotFoundException) {
