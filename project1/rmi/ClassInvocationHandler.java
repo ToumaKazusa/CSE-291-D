@@ -11,6 +11,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
 
+import org.hamcrest.core.IsInstanceOf;
+
 public class ClassInvocationHandler implements InvocationHandler, Serializable {
 	
 	private static final long serialVersionUID = 0;
@@ -114,7 +116,14 @@ public class ClassInvocationHandler implements InvocationHandler, Serializable {
 				}
 				ObjectInputStream istream = new ObjectInputStream(socket.getInputStream());
 				if(istream!=null){
-					return istream.readObject();
+					Object result = istream.readObject();
+					if (result IsInstanceOf Exception) {
+						System.out.println("Get Returen Execption " + result);
+						throw result;
+					}
+					else {
+						return result;
+					}
 				}
 			}
 		}

@@ -61,7 +61,8 @@ public abstract class ServerListener<T> implements Runnable {
 					ostream.writeObject(result);
 					ostream.flush();
 				} catch (Exception e) {
-					System.out.println("catch exception:" + e);
+					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
+					ostream.writeObject(e);
 				}
 				
 //				Method method = this.c.getMethod(methodname, para);
