@@ -117,7 +117,7 @@ public class ClassInvocationHandler implements InvocationHandler, Serializable {
 				ObjectInputStream istream = new ObjectInputStream(socket.getInputStream());
 				if(istream!=null){
 					Object result = istream.readObject();
-					if (result IsInstanceOf Exception) {
+					if (result instanceof Exception) {
 						System.out.println("Get Returen Execption " + result);
 						throw result;
 					}
