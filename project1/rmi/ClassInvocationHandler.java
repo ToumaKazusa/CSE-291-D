@@ -1,5 +1,7 @@
 package rmi;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -117,7 +119,18 @@ public class ClassInvocationHandler implements InvocationHandler, Serializable {
 					Object result = istream.readObject();
 					if (result instanceof Exception) {
 						System.out.println("Get Returen Execption " + result);
-						throw (Exception)result;
+						if (result instanceof FileNotFoundException) {
+							throw (FileNotFoundException)result;
+						}
+						else if (result instanceof IOException) {
+							throw (IOException)result;
+						}
+						else if (result instanceof RMIException) {
+							throw (RMIException)result;
+						}
+						else {
+							throw (Exception)result;
+						}
 					}
 					else {
 						return result;
