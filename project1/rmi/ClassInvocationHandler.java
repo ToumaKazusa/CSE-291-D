@@ -11,8 +11,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
 
-import org.hamcrest.core.IsInstanceOf;
-
 public class ClassInvocationHandler implements InvocationHandler, Serializable {
 	
 	private static final long serialVersionUID = 0;
