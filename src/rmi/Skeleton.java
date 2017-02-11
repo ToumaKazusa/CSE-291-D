@@ -234,7 +234,7 @@ public class Skeleton<T>
 		new Thread(listener).start();
 		
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
