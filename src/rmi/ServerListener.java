@@ -49,17 +49,22 @@ public abstract class ServerListener<T> implements Runnable {
 				Class[] para = (Class[]) istream.readObject();
 				
 				Method method = c.getMethod(methodname, para);
-				Object result = method.invoke(object, args);
 				
-				ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
-				ostream.writeObject(result);
-				ostream.flush();
+				try {
+					Object result = method.invoke(object, args);
+					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
+					ostream.writeObject(result);
+					ostream.flush();
+				} catch (Exception e) {
+					System.out.println("catch exception:" + e);
+				}
+				
+				
 			}
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e);
-			
 		} 
 		
 	}
