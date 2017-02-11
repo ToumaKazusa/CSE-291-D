@@ -53,34 +53,44 @@ public abstract class ServerListener<T> implements Runnable {
 				Object[] args = (Object[]) istream.readObject();
 				Class[] para = (Class[]) istream.readObject();
 				
-				Method method = this.c.getMethod(methodname, para);
-				Object result = null;
-				try{
-					result = method.invoke(object, args);
-				}catch(InvocationTargetException e){
-					return;
-				}catch(IllegalAccessException e){
-					e.printStackTrace();
-				}
-				ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
-				try{
+				Method method = c.getMethod(methodname, para);
+				
+				try {
+					Object result = method.invoke(object, args);
+					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
 					ostream.writeObject(result);
-				}catch(IOException e){
-
-				}finally{
-					if(ostream!=null){
-						try{
-							ostream.close();
-						}catch(IOException e){
-
-						}
-					}
+					ostream.flush();
+				} catch (Exception e) {
+					System.out.println("catch exception:" + e);
 				}
+				
+//				Method method = this.c.getMethod(methodname, para);
+//				Object result = null;
+//				try{
+//					result = method.invoke(object, args);
+//				}catch(InvocationTargetException e){
+//					return;
+//				}catch(IllegalAccessException e){
+//					e.printStackTrace();
+//				}
+//				ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
+//				try{
+//					ostream.writeObject(result);
+//				}catch(IOException e){
+//
+//				}finally{
+//					if(ostream!=null){
+//						try{
+//							ostream.close();
+//						}catch(IOException e){
+//
+//						}
+//					}
+//				}
 			}
-			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("listen exception:" + e);
 		} 
 		
 	}
