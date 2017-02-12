@@ -57,7 +57,7 @@ public abstract class ServerListener<T> implements Runnable {
 				
 				Method method = c.getMethod(methodname, para);
 				
-				new Thread(new ServerThread(new ObjectOutputStream(socket.getOutputStream()), obj, method, args)).start();
+				new Thread(new ServerThread(new ObjectOutputStream(socket.getOutputStream()), object, method, args)).start();
 				
 //				try {
 //					Object result = method.invoke(object, args);
