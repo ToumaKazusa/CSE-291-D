@@ -1,14 +1,15 @@
 # init
-docker network rm mynetwork
 docker stop pingserver
 docker stop pingclient
 docker stop data
 docker rm pingserver
 docker rm pingclient
 docker rm data
+docker network rm mynetwork
 
 # compile codes first
 javac ./code/*/*.java ./code/*/*/*.java
+
 # init the dockerfile
 docker build -t ubuntu ./ubuntu
 docker build -t code ./code
@@ -17,15 +18,12 @@ docker build -t code ./code
 docker create -v /data --name data code /bin/true
 
 # create network
-docker network create -d bridge mynetwork
+docker network create mynetwork --subnet 172.18.0.0/16
 
 # start server
-docker run -d --net=mynetwork  --name pingserver --volumes-from data ubuntu java -cp ./data server.PingPongServer
+docker run -d --net=mynetwork --ip 172.18.0.2 --name pingserver --volumes-from data ubuntu java -cp ./data server.PingPongServer
 # start client
-docker run -d --net=mynetwork  --name pingclient --volumes-from data ubuntu java -cp ./data client.PingPongClient
+docker run -d --net=mynetwork --ip 172.18.0.3 --name pingclient --volumes-from data ubuntu java -cp ./data client.PingPongClient
 
-echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 echo use \"docker logs pingclient\" and \"docker logs pingserver\" to check the running status
-echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
