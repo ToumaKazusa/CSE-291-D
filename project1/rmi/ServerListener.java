@@ -1,5 +1,6 @@
 package rmi;
 
+import rmi.ServerThread;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
@@ -56,19 +57,21 @@ public abstract class ServerListener<T> implements Runnable {
 				
 				Method method = c.getMethod(methodname, para);
 				
-				try {
-					Object result = method.invoke(object, args);
-					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
-					ostream.writeObject(result);
-					ostream.flush();
-				} catch (InvocationTargetException ite) {
-					System.out.println("Catch invoke exception: " + (Exception)ite.getTargetException());
-					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
-					ostream.writeObject((Exception)ite.getTargetException());
-				} catch (Exception ex) {
-					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
-					ostream.writeObject(ex);
-				}
+				new Thread(new ServerThread(new ObjectOutputStream(socket.getOutputStream()), obj, method, args)).start();
+				
+//				try {
+//					Object result = method.invoke(object, args);
+//					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
+//					ostream.writeObject(result);
+//					ostream.flush();
+//				} catch (InvocationTargetException ite) {
+//					System.out.println("Catch invoke exception: " + (Exception)ite.getTargetException());
+//					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
+//					ostream.writeObject((Exception)ite.getTargetException());
+//				} catch (Exception ex) {
+//					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
+//					ostream.writeObject(ex);
+//				}
 				
 //				Method method = this.c.getMethod(methodname, para);
 //				Object result = null;

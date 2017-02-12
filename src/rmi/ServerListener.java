@@ -42,11 +42,17 @@ public abstract class ServerListener<T> implements Runnable {
 				}
 				
 				System.out.println("Accept...");
-				ObjectInputStream istream = new ObjectInputStream(socket.getInputStream());
-				
+				ObjectInputStream istream = null;
+				try{
+					istream = new ObjectInputStream(socket.getInputStream());
+				}catch(Exception e){
+					throw new RMIException(e.getCause());
+				}
 				String methodname = (String) istream.readObject();
 				Object[] args = (Object[]) istream.readObject();
 				Class[] para = (Class[]) istream.readObject();
+				
+				System.out.println("Method name is: " + methodname);
 				
 				Method method = c.getMethod(methodname, para);
 				
@@ -55,16 +61,42 @@ public abstract class ServerListener<T> implements Runnable {
 					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
 					ostream.writeObject(result);
 					ostream.flush();
-				} catch (Exception e) {
-					System.out.println("catch exception:" + e);
+				} catch (InvocationTargetException ite) {
+					System.out.println("Catch invoke exception: " + (Exception)ite.getTargetException());
+					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
+					ostream.writeObject((Exception)ite.getTargetException());
+				} catch (Exception ex) {
+					ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
+					ostream.writeObject(ex);
 				}
 				
-				
+//				Method method = this.c.getMethod(methodname, para);
+//				Object result = null;
+//				try{
+//					result = method.invoke(object, args);
+//				}catch(InvocationTargetException e){
+//					return;
+//				}catch(IllegalAccessException e){
+//					e.printStackTrace();
+//				}
+//				ObjectOutputStream ostream = new ObjectOutputStream(socket.getOutputStream());
+//				try{
+//					ostream.writeObject(result);
+//				}catch(IOException e){
+//
+//				}finally{
+//					if(ostream!=null){
+//						try{
+//							ostream.close();
+//						}catch(IOException e){
+//
+//						}
+//					}
+//				}
 			}
-			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println(e);
+			System.out.println("listen exception:" + e);
 		} 
 		
 	}
