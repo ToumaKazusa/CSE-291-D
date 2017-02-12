@@ -1,7 +1,6 @@
 package server;
 
 import rmi.RMIException;
-import client.PingServer;
 import java.lang.*;
 
 public class PingServerImpl implements PingServer {
