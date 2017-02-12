@@ -4,8 +4,12 @@ import rmi.RMIException;
 public class PingPongClient {
     public static void main(String[] args) {
     	PingServer server = PingServerFactory.makePingServer();
-    	System.out.println(server.ping(1000));
-    	System.out.println(server.ping(2000));
-    	System.out.println(server.ping(3000));
-    }
+    	for (int i = 1;i < 5;i ++) {
+    		try {
+	            System.out.println(server.ping(i));
+	        } catch (RMIException e) {
+	            System.out.println(e);
+	        }
+        }
+	}
 }

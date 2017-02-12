@@ -1,5 +1,7 @@
 package server;
 
+import rmi.*;
+import client.*;
 import java.net.InetSocketAddress;
 
 public class PingPongServer {
